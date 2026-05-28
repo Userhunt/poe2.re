@@ -1,5 +1,5 @@
 ---
-name: Отчет об ошибке
+name: Feature request
 about: Создание отчета для улучшения веб-страницы
 title: 'Ошибка: <проблема>'
 labels: bug

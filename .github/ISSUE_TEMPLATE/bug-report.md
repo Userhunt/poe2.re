@@ -1,5 +1,5 @@
 ---
-name: Запрос на добавление функции
+name: Bug report
 about: Предложите идею для этого проекта
 title: 'Функция: <Название>'
 labels: enhancement
