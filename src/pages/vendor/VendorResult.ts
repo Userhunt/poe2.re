@@ -1,5 +1,10 @@
 import {Settings} from "@/app/settings.ts";
 
+import {loadRuAffixes, RuAffix} from "@/lib/loadRuAffixes.ts";
+
+const names: Map<String, RuAffix> = loadRuAffixes("vendor");
+const name_types: Map<String, RuAffix> = loadRuAffixes("vendor-type");
+
 export function generateVendorRegex(settings: Settings): string {
   const terms = [
     ...itemProperty(settings.vendor.itemProperty),
@@ -19,37 +24,37 @@ export function generateVendorRegex(settings: Settings): string {
 
 function itemProperty(settings: Settings["vendor"]["itemProperty"]): (string | null)[] {
   return [
-    settings.quality ? "y: \\+" : null,
-    settings.sockets ? "ts: S" : null,
+    settings.quality ? names.get("quality")!.regex : null,
+    settings.sockets ? names.get("sockets")!.regex : null,
   ].filter((e) => e !== null)
 }
 
 function itemType(settings: Settings["vendor"]["itemType"]): string | null {
   const types = [
-    settings.rare ? "r" : null,
-    settings.magic ? "m" : null,
-    settings.normal ? "n" : null,
+    settings.rare ? names.get("Rare")!.regex : null,
+    settings.magic ? names.get("Magic")!.regex : null,
+    settings.normal ? names.get("Normal")!.regex : null,
   ].filter((e) => e !== null);
 
   if (types.length === 0 || types.length === 3) return null;
-  if (types.length > 1) return `y: (${types.join("|")})`
-  return `y: ${types.join("|")}`;
+  if (types.length > 1) return `(${types.join("|")})`
+  return `${types.join("|")}`;
 }
 
 function resistances(settings: Settings["vendor"]["resistances"]): string | null {
   const res = [
-    settings.fire ? "fi" : null,
-    settings.cold ? "co" : null,
-    settings.lightning ? "li" : null,
-    settings.chaos ? "ch" : null,
+    settings.fire ? names.get("FireResistance")!.regex : null,
+    settings.cold ? names.get("ColdResistance")!.regex : null,
+    settings.lightning ? names.get("LightningResistance")!.regex : null,
+    settings.chaos ? names.get("ChaosResistance")!.regex : null,
   ].filter((e) => e !== null);
 
   if (res.length === 0) return null;
-  if (res.length === 4) return `resi`;
-  if (res.length > 1) return `(${res.join("|")}).+res`;
+  let regex = name_types.get("resistance")!.regex;
+  if (res.length === 4) return regex;
+  if (res.length > 1) return regex + `.+(${res.join("|")})`;
 
-  return `${res.join("|")}.+res`
-
+  return regex + `.+${res.join("|")}`;
 }
 
 function movement(settings: Settings["vendor"]["movementSpeed"]): string | null {
@@ -63,10 +68,12 @@ function movement(settings: Settings["vendor"]["movementSpeed"]): string | null 
     settings.move15 ? "15" : null,
   ].filter((e) => e !== null)
 
+  const regex = names.get("MovementSpeed")!.regex;
+
   const numOfSelected = move0.length + move5.length;
   if (numOfSelected === 0) return null;
-  if (numOfSelected === 1) return `${[move0, move5].join("")}% i.+mov`;
-  if (numOfSelected === 5) return `\\d+% i.+mov`;
+  if (numOfSelected === 1) return `${[move0, move5].join("")}% ` + regex;
+  if (numOfSelected === 5) return `\\d+% ` + regex;
 
   const zeros = move0.length > 1 ?
     `[${move0.map((e) => e[0]).join("")}]0`
@@ -74,15 +81,15 @@ function movement(settings: Settings["vendor"]["movementSpeed"]): string | null 
   const fives = move5.length > 1 ?
     `[${move5.map((e) => e[0]).join("")}]5`
     : move5.join("|");
-  return `(${[zeros, fives].filter((e) => e !== null && e !== "").join("|")})% i.+mov`;
+  return `(${[zeros, fives].filter((e) => e !== null && e !== "").join("|")})% ` + regex;
 }
 
 function itemMods(settings: Settings["vendor"]["itemMods"]): (string | null)[] {
-  const eleDamage = settings.elemental ? "cfl" : [
-    settings.coldDamage ? "co" : null,
-    settings.chaosDamage ? "ch" : null,
-    settings.fireDamage ? "f" : null,
-    settings.lightningDamage? "l" : null,
+  const eleDamage = [
+    settings.coldDamage ? names.get("FireDamage")!.regex : null,
+    settings.chaosDamage ? names.get("ChaosDamage")!.regex : null,
+    settings.fireDamage ? names.get("LightningDamage")!.regex : null,
+    settings.lightningDamage? names.get("ColdDamage")!.regex : null,
   ].filter((e) => e !== null).join("|");
 
   const eleString = eleDamage.includes("|") ? `(${eleDamage})` : `${eleDamage}`;
@@ -94,24 +101,24 @@ function itemMods(settings: Settings["vendor"]["itemMods"]): (string | null)[] {
   ].filter((e) => e !== null).join("|")
 
   return [
-    settings.physical ? "ph.*da" : null,
-    settings.spellDamage ? "ell.*ge$" : null,
-    eleDamage ? `\\d ${eleString}.+da` : null,
-    settings.skillLevel ? "^\\+.*ills$" : null,
-    settings.skillLevelMinion ? "^\\+.*ion skills$" : null,
+    settings.physical ? names.get("PhysicalDamage")!.regex : null,
+    settings.spellDamage ? names.get("SpellDamage")!.regex : null,
+    eleDamage ? `${eleString}` : null,
+    settings.skillLevel ? names.get("AllSkillLvl")!.regex : null,
+    settings.skillLevelMinion ? names.get("MinionSkillLvl")!.regex : null,
     settings.skillLevelMelee ? "^\\+.*ee skills$" : null,
-    settings.skillLevelSpell ? "^\\+.*l sp.*ls$" : null,
-    settings.skillLevelFire ? "^\\+.*re sp.*ls$" : null,
-    settings.skillLevelCold ? "^\\+.*ld sp.*ls$" : null,
-    settings.skillLevelLightning ? "^\\+.*ng sp.*ls$" : null,
-    settings.skillLevelPhysical ? "^\\+.*al sp.*ls$" : null,
+    settings.skillLevelSpell ? names.get("SpellSkillLvl")!.regex : null,
+    settings.skillLevelFire ? names.get("FireSpellSkillLvl")!.regex : null,
+    settings.skillLevelCold ? names.get("ColdSpellSkillLvl")!.regex : null,
+    settings.skillLevelLightning ? names.get("LightningSpellSkillLvl")!.regex : null,
+    settings.skillLevelPhysical ? names.get("PhysicalSpellSkillLvl")!.regex : null,
     settings.skillLevelProjectile ? "^\\+.*ile skills$" : null,
-    settings.spirit ? "spiri" : null,
-    settings.rarity ? "d rari" : null,
-    settings.attackSpeed ? "ck spe" : null,
-    settings.castSpeed ? "st spe" : null,
-    settings.maxLife ? "\\d.+life" : null,
-    settings.maxMana ? "\\d.+mana" : null,
+    settings.spirit ? names.get("Spirit")!.regex : null,
+    settings.rarity ? names.get("IncreasedRarity")!.regex : null,
+    settings.attackSpeed ? names.get("AttackSpeed")!.regex : null,
+    settings.castSpeed ? names.get("CastSpeed")!.regex : null,
+    settings.maxLife ? names.get("MaximumLife")!.regex : null,
+    settings.maxMana ? names.get("MaximumMana")!.regex : null,
     attributes ? `o (all a|${attributes})` : null
   ].filter((e) => e !== null)
 }

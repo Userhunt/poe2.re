@@ -38,7 +38,6 @@ export interface Settings {
     itemMods: {
       physical: boolean,
       spellDamage: boolean,
-      elemental: boolean,
       fireDamage: boolean,
       coldDamage: boolean,
       lightningDamage: boolean,
@@ -186,7 +185,6 @@ export const defaultSettings: Settings = {
     itemMods: {
       physical: false,
       spellDamage: false,
-      elemental: false,
       skillLevel: false,
       skillLevelMinion: false,
       skillLevelMelee: false,

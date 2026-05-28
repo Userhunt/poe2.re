@@ -8,6 +8,10 @@ import {defaultSettings, Settings} from "@/app/settings.ts";
 import {generateVendorRegex} from "@/pages/vendor/VendorResult.ts";
 import {Input} from "@/components/ui/input.tsx";
 
+import {loadRuAffixes, RuAffix} from "@/lib/loadRuAffixes.ts";
+
+const names: Map<String, RuAffix> = loadRuAffixes("vendor");
+
 export function Vendor() {
 
   const initialProfile = selectedProfile();
@@ -62,71 +66,71 @@ export function Vendor() {
         <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4">
           <div>
             <p className="text-xs font-medium text-sidebar-foreground/70 pb-2">Item property</p>
-            <Checked id="atr-quality" text="Quality" checked={settings.itemProperty.quality}
+            <Checked id="atr-quality" text={names.get("quality")!.name} checked={settings.itemProperty.quality}
                      onChange={(b) => setSettings({
                        ...settings, itemProperty: {...settings.itemProperty, quality: b}
                      })}
             />
-            <Checked id="atr-socket" text="Sockets" checked={settings.itemProperty.sockets}
+            <Checked id="atr-socket" text={names.get("sockets")!.name} checked={settings.itemProperty.sockets}
                      onChange={(b) => setSettings({
                        ...settings, itemProperty: {...settings.itemProperty, sockets: b}
                      })}
             />
             <p className="text-xs font-medium text-sidebar-foreground/70 pb-2 pt-4">Speed</p>
-            <Checked id="mod-attack-speed" text="Attack speed" checked={settings.itemMods.attackSpeed}
+            <Checked id="mod-attack-speed" text={names.get("AttackSpeed")!.name} checked={settings.itemMods.attackSpeed}
                  onChange={(b) => setSettings({
                    ...settings, itemMods: {...settings.itemMods, attackSpeed: b}
                  })}
             />
-            <Checked id="mod-cast-speed" text="Cast speed" checked={settings.itemMods.castSpeed}
+            <Checked id="mod-cast-speed" text={names.get("CastSpeed")!.name} checked={settings.itemMods.castSpeed}
                  onChange={(b) => setSettings({
                    ...settings, itemMods: {...settings.itemMods, castSpeed: b}
                  })}
             />
 
             <p className="text-xs font-medium text-sidebar-foreground/70 pb-2 pt-4">Movement speed</p>
-            <Checked id="30ms" text="Movement speed (30%)" checked={settings.movementSpeed.move30}
+            <Checked id="30ms" text={names.get("MovementSpeed")!.name + " (30%)"} checked={settings.movementSpeed.move30}
                      onChange={(b) => setSettings({
                        ...settings, movementSpeed: {...settings.movementSpeed, move30: b}
                      })}
             />
-            <Checked id="25ms" text="Movement speed (25%)" checked={settings.movementSpeed.move25}
+            <Checked id="25ms" text={names.get("MovementSpeed")!.name + " (25%)"} checked={settings.movementSpeed.move25}
                      onChange={(b) => setSettings({
                        ...settings, movementSpeed: {...settings.movementSpeed, move25: b}
                      })}
             />
-            <Checked id="20ms" text="Movement speed (20%)" checked={settings.movementSpeed.move20}
+            <Checked id="20ms" text={names.get("MovementSpeed")!.name + " (20%)"} checked={settings.movementSpeed.move20}
                      onChange={(b) => setSettings({
                        ...settings, movementSpeed: {...settings.movementSpeed, move20: b}
                      })}
             />
-            <Checked id="15ms" text="Movement speed (15%)" checked={settings.movementSpeed.move15}
+            <Checked id="15ms" text={names.get("MovementSpeed")!.name + " (15%)"} checked={settings.movementSpeed.move15}
                      onChange={(b) => setSettings({
                        ...settings, movementSpeed: {...settings.movementSpeed, move15: b}
                      })}
             />
-            <Checked id="10ms" text="Movement speed (10%)" checked={settings.movementSpeed.move10}
+            <Checked id="10ms" text={names.get("MovementSpeed")!.name + " (10%)"} checked={settings.movementSpeed.move10}
                      onChange={(b) => setSettings({
                        ...settings, movementSpeed: {...settings.movementSpeed, move10: b}
                      })}
             />
             <p className="text-xs font-medium text-sidebar-foreground/70 pb-2 pt-4">Resistances</p>
-            <Checked id="res-fire" text="Fire resistance" checked={settings.resistances.fire}
+            <Checked id="res-fire" text={names.get("FireResistance")!.name} checked={settings.resistances.fire}
                      onChange={(b) => setSettings({
                        ...settings, resistances: {...settings.resistances, fire: b}
                      })}
             />
-            <Checked id="res-cold" text="Cold resistance" checked={settings.resistances.cold}
+            <Checked id="res-cold" text={names.get("ColdResistance")!.name} checked={settings.resistances.cold}
                      onChange={(b) => setSettings({
                        ...settings, resistances: {...settings.resistances, cold: b}
                      })}
             />
-            <Checked id="res-lightning" text="Lightning resistance" checked={settings.resistances.lightning}
+            <Checked id="res-lightning" text={names.get("LightningResistance")!.name} checked={settings.resistances.lightning}
                      onChange={(b) => setSettings({
                        ...settings, resistances: {...settings.resistances, lightning: b}
                      })}
             />
-            <Checked id="res-chaos" text="Chaos resistance" checked={settings.resistances.chaos}
+            <Checked id="res-chaos" text={names.get("ChaosResistance")!.name} checked={settings.resistances.chaos}
                      onChange={(b) => setSettings({
                        ...settings, resistances: {...settings.resistances, chaos: b}
                      })}
@@ -134,68 +138,63 @@ export function Vendor() {
           </div>
           <div>
             <p className="text-xs font-medium text-sidebar-foreground/70 pb-2">Item modifiers</p>
-            <Checked id="mod-physical" text="Physical damage" checked={settings.itemMods.physical}
+            <Checked id="mod-physical" text={names.get("PhysicalDamage")!.name} checked={settings.itemMods.physical}
                      onChange={(b) => setSettings({
                        ...settings, itemMods: {...settings.itemMods, physical: b}
                      })}
             />
-            <Checked id="mod-spellDamage" text="Spell damage" checked={settings.itemMods.spellDamage}
+            <Checked id="mod-spellDamage" text={names.get("SpellDamage")!.name} checked={settings.itemMods.spellDamage}
                      onChange={(b) => setSettings({
                        ...settings, itemMods: {...settings.itemMods, spellDamage: b}
                      })}
             />
-            <Checked id="mod-elemental" text="Elemental damage" checked={settings.itemMods.elemental}
-                     onChange={(b) => setSettings({
-                       ...settings, itemMods: {...settings.itemMods, elemental: b}
-                     })}
-            />
-            <Checked id="mod-cold" text="Cold damage" checked={settings.itemMods.coldDamage}
+            <Checked id="mod-cold" text={names.get("ColdDamage")!.name} checked={settings.itemMods.coldDamage}
                      onChange={(b) => setSettings({
                          ...settings, itemMods: {...settings.itemMods, coldDamage: b}
                      })}
             />
-            <Checked id="mod-fire" text="Fire damage" checked={settings.itemMods.fireDamage}
+            <Checked id="mod-fire" text={names.get("FireDamage")!.name} checked={settings.itemMods.fireDamage}
                      onChange={(b) => setSettings({
                          ...settings, itemMods: {...settings.itemMods, fireDamage: b}
                      })}
             />
-            <Checked id="mod-lightning" text="Lightning damage" checked={settings.itemMods.lightningDamage}
+            <Checked id="mod-lightning" text={names.get("LightningDamage")!.name} checked={settings.itemMods.lightningDamage}
                      onChange={(b) => setSettings({
                          ...settings, itemMods: {...settings.itemMods, lightningDamage: b}
                      })}
             />
-            <Checked id="mod-chaos" text="Chaos damage" checked={settings.itemMods.chaosDamage}
+            <Checked id="mod-chaos" text={names.get("ChaosDamage")!.name} checked={settings.itemMods.chaosDamage}
                      onChange={(b) => setSettings({
                          ...settings, itemMods: {...settings.itemMods, chaosDamage: b}
                      })}
             />
-            <Checked id="mod-spirit" text="+# Spirit" checked={settings.itemMods.spirit}
+            <Checked id="mod-spirit" text={names.get("Spirit")!.name} checked={settings.itemMods.spirit}
                      onChange={(b) => setSettings({
                        ...settings, itemMods: {...settings.itemMods, spirit: b}
                      })}
             />
-            <Checked id="mod-rarity" text="Increased Rarity" checked={settings.itemMods.rarity}
+            <Checked id="mod-rarity" text={names.get("IncreasedRarity")!.name} checked={settings.itemMods.rarity}
                      onChange={(b) => setSettings({
                        ...settings, itemMods: {...settings.itemMods, rarity: b}
                      })}
             />
-            <Checked id="mod-max-life" text="Maximum Life" checked={settings.itemMods.maxLife}
+            <Checked id="mod-max-life" text={names.get("MaximumLife")!.name} checked={settings.itemMods.maxLife}
                      onChange={(b) => setSettings({
                          ...settings, itemMods: {...settings.itemMods, maxLife: b}
                      })}
             />
-            <Checked id="mod-max-mana" text="Maximum Mana" checked={settings.itemMods.maxMana}
+            <Checked id="mod-max-mana" text={names.get("MaximumMana")!.name} checked={settings.itemMods.maxMana}
                      onChange={(b) => setSettings({
                          ...settings, itemMods: {...settings.itemMods, maxMana: b}
                      })}
             />
             <p className="text-xs font-medium text-sidebar-foreground/70 pb-2 pt-4">Item modifiers (skill)</p>
-            <Checked id="mod-skill" text="+# to level of skills" checked={settings.itemMods.skillLevel}
+            <Checked id="mod-skill" text={names.get("AllSkillLvl")!.name} checked={settings.itemMods.skillLevel}
                      onChange={(b) => setSettings({
                        ...settings, itemMods: {...settings.itemMods, skillLevel: b}
                      })}
             />
-            <Checked id="mod-skill-minion" text="+# to level of minion skills" checked={settings.itemMods.skillLevelMinion}
+            <Checked id="mod-skill-minion" text={names.get("MinionSkillLvl")!.name} checked={settings.itemMods.skillLevelMinion}
                      onChange={(b) => setSettings({
                        ...settings, itemMods: {...settings.itemMods, skillLevelMinion: b}
                      })}
@@ -205,27 +204,27 @@ export function Vendor() {
                        ...settings, itemMods: {...settings.itemMods, skillLevelMelee: b}
                      })}
             />
-            <Checked id="mod-skill-spell" text="+# to level of all spell skills" checked={settings.itemMods.skillLevelSpell}
+            <Checked id="mod-skill-spell" text={names.get("SpellSkillLvl")!.name} checked={settings.itemMods.skillLevelSpell}
                      onChange={(b) => setSettings({
                        ...settings, itemMods: {...settings.itemMods, skillLevelSpell: b}
                      })}
             />
-            <Checked id="mod-skill-fire" text="+# to level of fire spell skills" checked={settings.itemMods.skillLevelFire}
+            <Checked id="mod-skill-fire" text={names.get("FireSpellSkillLvl")!.name} checked={settings.itemMods.skillLevelFire}
                      onChange={(b) => setSettings({
                        ...settings, itemMods: {...settings.itemMods, skillLevelFire: b}
                      })}
             />
-            <Checked id="mod-skill-cold" text="+# to level of cold spell skills" checked={settings.itemMods.skillLevelCold}
+            <Checked id="mod-skill-cold" text={names.get("ColdSpellSkillLvl")!.name} checked={settings.itemMods.skillLevelCold}
                      onChange={(b) => setSettings({
                        ...settings, itemMods: {...settings.itemMods, skillLevelCold: b}
                      })}
             />
-            <Checked id="mod-skill-lightning" text="+# to level of lightning spell skills" checked={settings.itemMods.skillLevelLightning}
+            <Checked id="mod-skill-lightning" text={names.get("LightningSpellSkillLvl")!.name} checked={settings.itemMods.skillLevelLightning}
                      onChange={(b) => setSettings({
                        ...settings, itemMods: {...settings.itemMods, skillLevelLightning: b}
                      })}
             />
-            <Checked id="mod-skill-physical" text="+# to level of physical spell skills" checked={settings.itemMods.skillLevelPhysical}
+            <Checked id="mod-skill-physical" text={names.get("PhysicalSpellSkillLvl")!.name} checked={settings.itemMods.skillLevelPhysical}
                      onChange={(b) => setSettings({
                        ...settings, itemMods: {...settings.itemMods, skillLevelPhysical: b}
                      })}
@@ -328,18 +327,18 @@ export function Vendor() {
             </div>
 
             <p className="text-xs font-medium text-sidebar-foreground/70 pb-2 pt-4">Item rarity</p>
-            <Checked id="itemtype-rare" text="Rare"
+            <Checked id="itemtype-rare" text={names.get("Rare")!.name}
                      checked={settings.itemType.rare}
                      onChange={(b) => setSettings({
                        ...settings, itemType: {...settings.itemType, rare: b}
                      })}
             />
-            <Checked id="itemtype-magic" text="Magic" checked={settings.itemType.magic}
+            <Checked id="itemtype-magic" text={names.get("Magic")!.name} checked={settings.itemType.magic}
                      onChange={(b) => setSettings({
                        ...settings, itemType: {...settings.itemType, magic: b}
                      })}
             />
-            <Checked id="itemtype-normal" text="Normal" checked={settings.itemType.normal}
+            <Checked id="itemtype-normal" text={names.get("Normal")!.name} checked={settings.itemType.normal}
                      onChange={(b) => setSettings({
                        ...settings, itemType: {...settings.itemType, normal: b}
                      })}

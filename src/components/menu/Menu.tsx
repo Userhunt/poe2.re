@@ -23,16 +23,16 @@ import {
 
 const items = [
   {
-    title: "Vendor",
+    title: "Торговец",
     url: "/vendor",
     icon: vendorIcon,
   },
-  {
+  /*{
     title: "Waystones",
     url: "/waystone",
     icon: waystoneIcon,
   },
-  {
+  /*{
     title: "Tablets",
     url: "/tablet",
     icon: tabletIcon,
@@ -41,7 +41,7 @@ const items = [
     title: "Relics",
     url: "/relic",
     icon: relicIcon,
-  },
+  },*/
 ]
 
 export function Menu() {
@@ -68,12 +68,51 @@ export function Menu() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        <SidebarGroup>
+		<SidebarGroup>
           <SidebarMenu>
-            <SidebarGroupLabel>Improvements</SidebarGroupLabel>
+            <SidebarGroupLabel>Улучшения</SidebarGroupLabel>
           </SidebarMenu>
           <SidebarMenu>
             <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <a href="https://github.com/Userhunt/poe2.re/issues/new?template=feature-request.md" target="_blank">
+                  <Github/>
+                  <span>Feature request</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <a href="https://github.com/Userhunt/poe2.re/issues/new?template=bug-report.md" target="_blank">
+                  <Bug/>
+                  <span>Bug report</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <a href="https://github.com/Userhunt/poe2.re" target="_blank">
+                  <Code/>
+                  <span>Source code</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarGroupLabel>Оригинал</SidebarGroupLabel>
+          </SidebarMenu>
+          <SidebarMenu>
+			<SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <a href="https://poe2.re/" target="_blank">
+                  <Code/>
+                  <span>Original</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+			<SidebarMenuItem>
               <SidebarMenuButton asChild>
                 <a href="https://github.com/veiset/poe2.re/issues/new?assignees=veiset&labels=enhancement&projects=&template=feature_request.md&title=Feature%3A+%3CTitle%3E" target="_blank">
                   <Github/>
