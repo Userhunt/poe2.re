@@ -15,7 +15,7 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(webSettings.sidebarOpen);
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <SidebarProvider
         style={{
           // @ts-ignore
